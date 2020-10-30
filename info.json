@@ -1,0 +1,11 @@
+{
+  "name": "automatic-logistic-chests",
+  "version": "1.0.0",
+  "title": "Automatic logistic chests",
+  "author": "Daschi",
+  "factorio_version": "1.0",
+  "dependencies": [
+    "base >= 1.0"
+  ],
+  "description": "Automatically configures provider and requester chests."
+}

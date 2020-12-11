@@ -5,3 +5,8 @@ Date: 2020-10-30
     - Initial release
   Locale:
     - English
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-12-11
+  Info:
+    - Updated to factorio version 1.1

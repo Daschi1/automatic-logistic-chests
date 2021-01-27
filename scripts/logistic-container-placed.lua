@@ -66,10 +66,18 @@ function Logistic_container_placed(entity, game)
 
 									local control_behavior = inserter.get_or_create_control_behavior()
 
-									if not (control_behavior.get_circuit_network(defines.wire_type.green) or control_behavior.get_circuit_network(defines.wire_type.red) or control_behavior.connect_to_logistic_network) then
-											control_behavior.connect_to_logistic_network = true
+                                    if not settings.global["automatic-logistic-chests-disable-inserters"].value then
+                                        control_behavior.connect_to_logistic_network = false
+                                        control_behavior.logistic_condition = nil
+                                        control_behavior.circuit_condition = nil
+                                    end
+
+                                    if not (control_behavior.get_circuit_network(defines.wire_type.green) or control_behavior.get_circuit_network(defines.wire_type.red) or control_behavior.connect_to_logistic_network) then
+                                        if settings.global["automatic-logistic-chests-disable-inserters"].value then
+                                            control_behavior.connect_to_logistic_network = true
 											control_behavior.logistic_condition = condition
-											control_behavior.circuit_condition = condition
+                                            control_behavior.circuit_condition = condition
+                                        end
 									end
 								end
 							end

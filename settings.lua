@@ -48,6 +48,12 @@ data:extend({
         minimum_value = 0.1,
         maximum_value = 100
     },
+    {
+        type = "bool-setting",
+        name = "automatic-logistic-chests-disable-inserters",
+        setting_type = "runtime-global",
+        default_value = true
+    },
     -- runtime-per-user
     {
         type = "bool-setting",

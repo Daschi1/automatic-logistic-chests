@@ -18,9 +18,7 @@ function Logistic_container_placed(entity, game)
                         local inserter = surrounding_inserters[i]
                         if Compare_positions(inserter.pickup_position, entity.position) then
                             if inserter.drop_target then
-                                if not Get_educts_amounts(game, inserter.drop_target, educts_amounts) then
-                                    return
-                                end
+                                Get_educts_amounts(game, inserter.drop_target, educts_amounts)
                             end
                         end
                     end

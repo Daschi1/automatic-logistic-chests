@@ -30,10 +30,18 @@ function Logistic_container_placed(entity, game)
 
 						local request_slot = 1
                         for ingredient in pairs(educts_amounts) do
-                            local amount = educts_amounts[ingredient]
+
+                            local ChestSlots = entity.prototype.get_inventory_size(1)
+                            local RequestSlots = Table_length(educts_amounts)
+                            local StackSize = game.item_prototypes[ingredient].stack_size
+                            local TargetAmount = educts_amounts[ingredient]
+                            local MaxChestSlotsPerRequest = math.floor(ChestSlots / RequestSlots)
+                            local MaxTargetAllowedPerRequest = MaxChestSlotsPerRequest * StackSize
+                            local FinalAmount = math.min(TargetAmount,MaxTargetAllowedPerRequest)
+
 							entity.set_request_slot({
 								name = ingredient,
-								count = amount
+								count = FinalAmount
 							}, request_slot)
 							request_slot = request_slot + 1
 						end

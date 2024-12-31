@@ -7,7 +7,7 @@ script.on_event("automatic-logistic-chests-refresh-all-logistic-chests", functio
 		game.print("Refreshing all logistical chests")
 	end
 	local chests = player.surface.find_entities_filtered({ type = "logistic-container" })
-	for i = 1, Table_length(chests) do
-		Logistic_container_placed(chests[i], game)
+	for _, chest in pairs(chests) do
+		Logistic_container_placed(chest, game)
 	end
 end)

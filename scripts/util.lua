@@ -9,8 +9,8 @@ function Increment_value_in_table(table, key, value)
 	table[key] = table[key] + value
 end
 
-function Get_stack_size(game, item)
-	return game.item_prototypes[item].stack_size
+function Get_stack_size(item)
+	return prototypes.item[item].stack_size
 end
 
 function Modify_stack_size(amount, is_request)
@@ -31,10 +31,10 @@ function Get_educts_amounts(game, entity, educts_amounts)
 	local type = entity.type
 	if not crafting_machine_types[type] then
 		if settings.global["automatic-logistic-chests-enable-artillery-turret-integration"].value and type == "artillery-turret" then
-			Increment_value_in_table(educts_amounts, "artillery-shell", Modify_stack_size(Get_stack_size(game, "artillery-shell"), true))
+			Increment_value_in_table(educts_amounts, "artillery-shell", Modify_stack_size(Get_stack_size("artillery-shell"), true))
 			return true
 		elseif settings.global["automatic-logistic-chests-enable-rocket-silo-integration"].value and type == "rocket-silo" then
-			Increment_value_in_table(educts_amounts, "satellite", Modify_stack_size(Get_stack_size(game, "satellite"), true))
+			Increment_value_in_table(educts_amounts, "satellite", Modify_stack_size(Get_stack_size("satellite"), true))
 			return true
 		else
 			return false
@@ -47,7 +47,7 @@ function Get_educts_amounts(game, entity, educts_amounts)
 		local name = educt.name
         local amount = 0;
 		if educt.type == "item" and educt.amount then
-            local stack_size = Get_stack_size(game, name)
+            local stack_size = Get_stack_size(name)
             amount = Modify_stack_size(math.ceil( educt.amount / stack_size ) * stack_size, true)
 		end
 
@@ -62,7 +62,7 @@ function Get_products_amounts(game, entity, products_amounts)
 	local type = entity.type
 	if not crafting_machine_types[type] then
 		if settings.global["automatic-logistic-chests-enable-artillery-turret-integration"].value and type == "artillery-turret" then
-			Increment_value_in_table(products_amounts, "artillery-shell", Modify_stack_size(Get_stack_size(game, "artillery-shell"), false))
+			Increment_value_in_table(products_amounts, "artillery-shell", Modify_stack_size(Get_stack_size("artillery-shell"), false))
 			return true
 		else
 			return false
@@ -78,7 +78,7 @@ function Get_products_amounts(game, entity, products_amounts)
 			if settings.global["automatic-logistic-chests-enable-rocket-silo-integration"].value and name == "rocket-part" then
 				name = "space-science-pack"
 			end
-            local stack_size = Get_stack_size(game, name)
+            local stack_size = Get_stack_size(name)
             amount = Modify_stack_size(math.ceil( product.amount / stack_size ) * stack_size, false)
 		end
 
@@ -93,4 +93,4 @@ function Table_length(table)
     local count = 0
     for _ in pairs(table) do count = count + 1 end
     return count
-  end
+end

@@ -80,6 +80,7 @@ function Logistic_container_placed(entity, game)
                                         constant = amount
                                     }
 
+                                    -- set inserter control behaviour
                                     local control_behavior = inserter.get_or_create_control_behavior()
                                     if settings.global["automatic-logistic-chests-disable-inserters"].value then
                                         control_behavior.connect_to_logistic_network = true
@@ -91,6 +92,11 @@ function Logistic_container_placed(entity, game)
                                         control_behavior.logistic_condition = nil
                                         control_behavior.circuit_enable_disable = false
                                         control_behavior.circuit_condition = nil
+                                    end
+
+                                    -- if storage chest, set storage filter
+                                    if entity.prototype.logistic_mode == "storage" then
+                                        entity.storage_filter = product
                                     end
                                 end
                             end

@@ -5,8 +5,7 @@
   "author": "Daschi",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.28",
-    "? space-age >= 2.0.28"
+    "base >= 2.0.28"
   ],
   "description": "Automatically Configures Provider, Storage, and Requester Chests."
 }

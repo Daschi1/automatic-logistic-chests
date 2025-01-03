@@ -66,7 +66,7 @@ function inserter_handler.configure_inserter_filter_condition(surrounding_insert
         if is_inserter_dropping_into_chest(inserter, chest) then
             local control_behavior = inserter.get_or_create_control_behavior()
 
-            if control_behavior and control_behavior.valid and control_behavior.type == "inserter" then
+            if control_behavior and control_behavior.valid and control_behavior.type == defines.control_behavior.type.inserter then
                 ---@cast control_behavior LuaGenericOnOffControlBehavior
 
                 if disable_inserters_setting and first_product_name and first_product_amount then

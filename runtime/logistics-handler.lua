@@ -11,7 +11,7 @@ local logistics_handler = {}
 --- @param educts_amounts     table<string, number> Table of item->needed amounts
 --------------------------------------------------------------------------------
 local function handle_requester(chest, educts_amounts)
-    if #educts_amounts == 0 then return end
+    if utils.table_length(educts_amounts) == 0 then return end
 
     local logistics_point = chest.get_requester_point()
     if not logistics_point then return end
@@ -37,7 +37,7 @@ local function handle_requester(chest, educts_amounts)
     local request_slot = 1
     for item_name, target_amount in pairs(educts_amounts) do
         local chest_slots = chest.prototype.get_inventory_size(defines.inventory.chest) or 1
-        local request_count = #educts_amounts
+        local request_count = utils.table_length(educts_amounts)
 
         local stack_size = utils.get_stack_size(item_name)
         local max_chest_slots_per_req = math.floor(chest_slots / request_count)
@@ -74,10 +74,10 @@ local function handle_storage(chest, surrounding_inserters, products_amounts)
     end
     if not first_product_name then return end
 
-    if not old_storage_filter or #products_amounts == 1 then
+    if not old_storage_filter or utils.table_length(products_amounts) == 1 then
         -- Set the filter if there is no previous filter or only one possible product
         chest.storage_filter = first_product_name
-    elseif #products_amounts > 1 then
+    elseif utils.table_length(products_amounts) > 1 then
         -- If there are multiple products and a previous filter exists
         if not products_amounts[old_storage_filter.name] then
             -- Set the filter only if the previous filter is invalid (does not appear in the current product list)
@@ -122,7 +122,7 @@ function logistics_handler.handle_container(chest)
     }
 
     -- If no inserters around, nothing else to do
-    if #surrounding_inserters == 0 then return end
+    if utils.table_length(surrounding_inserters) == 0 then return end
 
     -- 2) Prepare educts/products tables.
     local educts_amounts = {}

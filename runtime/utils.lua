@@ -27,6 +27,21 @@ function utils.increment_value_in_table(table, key, value)
 end
 
 --------------------------------------------------------------------------------
+--- Counts the number of entries in a table, including both array-like and
+--- non-array-like tables.
+---
+--- @param table table
+--- @return number
+--------------------------------------------------------------------------------
+function utils.table_length(table)
+    local count = 0
+    for _, _ in pairs(table) do
+        count = count + 1
+    end
+    return count
+end
+
+--------------------------------------------------------------------------------
 --- Returns stack_size for a given item name.
 --- (Assumes prototypes.item[item_name].stack_size is valid.)
 ---

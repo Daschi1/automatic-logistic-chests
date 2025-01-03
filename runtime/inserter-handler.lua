@@ -16,18 +16,6 @@ local function get_first_product(products_amounts)
 end
 
 --------------------------------------------------------------------------------
---- Check if an inserter drops items into a specific chest.
----
---- @param inserter LuaEntity
---- @param chest LuaEntity
---- @return boolean
---------------------------------------------------------------------------------
-local function is_inserter_dropping_into_chest(inserter, chest)
-    local drop_target = inserter.drop_target
-    return drop_target ~= nil and drop_target.valid and drop_target == chest
-end
-
---------------------------------------------------------------------------------
 --- Helper function to set control behavior conditions for an inserter.
 ---
 --- @param control_behavior LuaGenericOnOffControlBehavior
@@ -48,6 +36,30 @@ local function set_inserter_conditions(control_behavior, condition)
 end
 
 --------------------------------------------------------------------------------
+--- Check if an inserter picks up items from a specific chest.
+---
+--- @param inserter LuaEntity
+--- @param chest LuaEntity
+--- @return boolean
+--------------------------------------------------------------------------------
+function inserter_handler.is_inserter_picking_from_chest(inserter, chest)
+    local pickup_target = inserter.pickup_target
+    return pickup_target ~= nil and pickup_target.valid and pickup_target == chest
+end
+
+--------------------------------------------------------------------------------
+--- Check if an inserter drops items into a specific chest.
+---
+--- @param inserter LuaEntity
+--- @param chest LuaEntity
+--- @return boolean
+--------------------------------------------------------------------------------
+function inserter_handler.is_inserter_dropping_into_chest(inserter, chest)
+    local drop_target = inserter.drop_target
+    return drop_target ~= nil and drop_target.valid and drop_target == chest
+end
+
+--------------------------------------------------------------------------------
 --- Configure the logistic/circuit filter conditions for inserters dropping into a chest.
 ---
 --- @param surrounding_inserters LuaEntity[]
@@ -63,7 +75,7 @@ function inserter_handler.configure_inserter_filter_condition(surrounding_insert
 
     -- Iterate over inserters and configure their conditions
     for _, inserter in pairs(surrounding_inserters) do
-        if is_inserter_dropping_into_chest(inserter, chest) then
+        if inserter_handler.is_inserter_dropping_into_chest(inserter, chest) then
             local control_behavior = inserter.get_or_create_control_behavior()
 
             if control_behavior and control_behavior.valid and control_behavior.type == defines.control_behavior.type.inserter then

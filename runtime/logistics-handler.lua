@@ -129,20 +129,17 @@ function logistics_handler.handle_container(chest)
     local products_amounts = {}
     -- For "requester" mode, we gather educts_amounts from any relevant machines that the inserters are "picking up from the chest".
     -- For "storage"/others, we gather product_amounts if the inserter are "dropping into the chest".
-
     for _, inserter in pairs(surrounding_inserters) do
         -- Check if chest is 'requester' or not
         if logistic_mode == "requester" then
-            local pickup_target = inserter.pickup_target
-            if pickup_target and pickup_target.valid and pickup_target == chest then
+            if inserter_handler.is_inserter_picking_from_chest(inserter, chest) then
                 local drop_target = inserter.drop_target
                 if drop_target and drop_target.valid then
                     educts_amounts = recipe_handler.get_educts_amounts(drop_target)
                 end
             end
         else
-            local drop_target = inserter.drop_target
-            if drop_target and drop_target.valid and drop_target == chest then
+            if inserter_handler.is_inserter_dropping_into_chest(inserter, chest) then
                 local pickup_target = inserter.pickup_target
                 if pickup_target and pickup_target.valid then
                     products_amounts = recipe_handler.get_products_amounts(pickup_target)

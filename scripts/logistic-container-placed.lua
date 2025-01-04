@@ -27,20 +27,16 @@ function Logistic_container_placed(entity, game)
                         local logistics_point = entity.get_requester_point()
                         local logistics_section = nil
 
-                        -- if sections exists, retrieve and clear it
+                        -- retrieve and clear it lgostics section
                         for _, section in pairs(logistics_point.sections) do
-                            if section ~= nil and section.group == "automatic-logistic-chests" then
+                            if section ~= nil and section.group == "" then
                                 logistics_section = section
                                 for slot_index = 1, section.filters_count do
                                     section.clear_slot(slot_index)
                                 end
                             end
                         end
-
-                        -- if section did not exist, create
-                        if logistics_section == nil then
-                            logistics_section = logistics_point.add_section("automatic-logistic-chests")
-                        end
+                        if not logistics_section then return end
 
                         local request_slot = 1
                         for ingredient in pairs(educts_amounts) do

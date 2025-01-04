@@ -25,13 +25,9 @@ local function set_inserter_conditions(control_behavior, condition)
     if condition then
         control_behavior.connect_to_logistic_network = true
         control_behavior.logistic_condition = condition
-        control_behavior.circuit_enable_disable = true
-        control_behavior.circuit_condition = condition
     else
         control_behavior.connect_to_logistic_network = false
         control_behavior.logistic_condition = nil
-        control_behavior.circuit_enable_disable = false
-        control_behavior.circuit_condition = nil
     end
 end
 
@@ -43,8 +39,9 @@ end
 --- @return boolean
 --------------------------------------------------------------------------------
 function inserter_handler.is_inserter_picking_from_chest(inserter, chest)
-    local pickup_target = inserter.pickup_target
-    return pickup_target ~= nil and pickup_target.valid and pickup_target == chest
+    local pickup_position = inserter.pickup_position
+    return inserter.surface_index == chest.surface_index and
+        utils.are_positions_within_same_tile(pickup_position, chest.position)
 end
 
 --------------------------------------------------------------------------------
@@ -55,8 +52,9 @@ end
 --- @return boolean
 --------------------------------------------------------------------------------
 function inserter_handler.is_inserter_dropping_into_chest(inserter, chest)
-    local drop_target = inserter.drop_target
-    return drop_target ~= nil and drop_target.valid and drop_target == chest
+    local drop_position = inserter.drop_position
+    return inserter.surface_index == chest.surface_index and
+        utils.are_positions_within_same_tile(drop_position, chest.position)
 end
 
 --------------------------------------------------------------------------------
@@ -67,7 +65,7 @@ end
 --- @param products_amounts table<string, number>
 --------------------------------------------------------------------------------
 function inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts)
-    -- Check global setting
+    -- Retrieve map setting
     local disable_inserters_setting = settings.global["automatic-logistic-chests-disable-inserters"].value
 
     -- Retrieve the first product and amount

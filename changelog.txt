@@ -1,8 +1,19 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.3.2
-Date: 2025-01-02
+Version: 1.4.0
+Date: 2025-01-04
+  Features:
+    - Added support for buffer chests in both directions.
+    - Added setting for 'Trash Unrequested' option.
+  Circuit Network:
+    - Removed unused circuit network conditions on inserters.
   Changes:
-    - Internal refactoring
+    - Internal refactor for better maintainability and expandability.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2025-01-04
+  Bugfixes:
+    - Fixed an issue where the mod used a globally shared named logistics group. The logistics group is now handled locally to prevent unintended behavior.
+      It is recommended to remove the previously created 'automatic-logistic-chests' logistics section and refresh all chests to properly migrate to the new setup.
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.1
 Date: 2025-01-01

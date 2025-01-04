@@ -8,32 +8,38 @@ local logistics_handler = {}
 --- For a Requester chest, set up logistic requests according to educts.
 ---
 --- @param chest       LuaEntity The logistic requester chest
---- @param educts_amounts     table<string, number> Table of item->needed amounts
+--- @param surrounding_inserters LuaEntity[]
 --------------------------------------------------------------------------------
-local function handle_requester(chest, educts_amounts)
+local function handle_requester(chest, surrounding_inserters)
+    -- Step 1: Gather educts amounts
+    local educts_amounts = recipe_handler.gather_educts(chest, surrounding_inserters)
+
+    -- Step 2: Exit early if no educts are found
     if utils.table_length(educts_amounts) == 0 then return end
 
+    -- Step 3: Retrieve the logistics point
     local logistics_point = chest.get_requester_point()
     if not logistics_point then return end
 
-    -- Find or create "automatic-logistic-chests" section
+    -- Step 4: Enable or disable the 'Trash unrequested' option based on the map setting
+    local trash_not_requested = settings.global["automatic-logistic-chests-trash-not-requested"].value == true
+    logistics_point.trash_not_requested = trash_not_requested
+
+    -- Step 5: Retrieve and clear the logistics section
     local logistics_section = nil
     for _, section in pairs(logistics_point.sections) do
-        if section and section.valid and section.group == "automatic-logistic-chests" then
+        if section and section.valid and section.group == "" then
             logistics_section = section
-            -- Clear existing slots
             for slot_index = 1, section.filters_count do
                 section.clear_slot(slot_index)
             end
         end
     end
-    if not logistics_section then
-        logistics_section = logistics_point.add_section("automatic-logistic-chests")
-    end
-    -- If logistics_section is still not valid, exit early
+
+    -- Step 6: Exit early if logistics section is invalid
     if not logistics_section or not logistics_section.valid then return end
 
-    -- Fill request slots with educt requests
+    -- Step 7: Fill request slots with educt requests
     local request_slot = 1
     for item_name, target_amount in pairs(educts_amounts) do
         local chest_slots = chest.prototype.get_inventory_size(defines.inventory.chest) or 1
@@ -57,23 +63,26 @@ end
 ---
 --- @param chest        LuaEntity
 --- @param surrounding_inserters LuaEntity[]
---- @param products_amounts    table<string, number>
 --------------------------------------------------------------------------------
-local function handle_storage(chest, surrounding_inserters, products_amounts)
-    -- 1) Configure inserter filter condition
+local function handle_storage(chest, surrounding_inserters)
+    -- Step 1: Gather products amounts
+    local products_amounts = recipe_handler.gather_products(chest, surrounding_inserters)
+
+    -- Step 2: Configure the inserters around the chest to handle specific products
     inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts)
 
-    -- 2) Update the storage chest filter based on available products
+    -- Step 3: Determine the appropriate storage filter
     local old_storage_filter = chest.storage_filter
     local first_product_name = nil
-
-    -- Retrieve the first product name (if any) from the list
     for product_name, _ in pairs(products_amounts) do
         first_product_name = product_name
-        break -- Stop after retrieving the first entry
+        break
     end
+
+    -- Step 4: Exit early if no valid products is found
     if not first_product_name then return end
 
+    -- Step 5: Update the storage filter
     if not old_storage_filter or utils.table_length(products_amounts) == 1 then
         -- Set the filter if there is no previous filter or only one possible product
         chest.storage_filter = first_product_name
@@ -87,21 +96,36 @@ local function handle_storage(chest, surrounding_inserters, products_amounts)
 end
 
 --------------------------------------------------------------------------------
---- For non-requester and non-storage (e.g. passive provider, buffer, active provider), configure inserters.
+--- For non-requester and non-storage (e.g. passive provider, active provider), configure inserters.
 ---
 --- @param chest        LuaEntity
 --- @param surrounding_inserters LuaEntity[]
---- @param products_amounts    table<string, number>
 --------------------------------------------------------------------------------
-local function handle_other(chest, surrounding_inserters, products_amounts)
-    -- 1) Configure inserter filter condition
+local function handle_other(chest, surrounding_inserters)
+    -- Step 1: Gather products amounts
+    local products_amounts = recipe_handler.gather_products(chest, surrounding_inserters)
+
+    -- Step 2: Configure inserter filter condition
     inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts)
 end
 
 --------------------------------------------------------------------------------
+--- For a Buffer chest, set up logistic requests and configure inserters.
+---
+--- @param chest              LuaEntity
+--- @param surrounding_inserters LuaEntity[]
+--------------------------------------------------------------------------------
+local function handle_buffer(chest, surrounding_inserters)
+    -- Step 1: Handle logistic requests
+    handle_requester(chest, surrounding_inserters)
+
+    -- Step 2: Configure inserters
+    handle_other(chest, surrounding_inserters)
+end
+
+--------------------------------------------------------------------------------
 --- Main entry point logistic container placed/refresh event.
---- Gathers relevant data (surrounding inserters, educts/products), then
---- defers to specific methods depending on logistic_mode (requester, storage, etc.).
+--- Handles the logic depending on logistic_mode (requester, storage, etc.).
 ---
 --- @param chest LuaEntity
 --------------------------------------------------------------------------------
@@ -111,7 +135,7 @@ function logistics_handler.handle_container(chest)
     local logistic_mode = chest.prototype.logistic_mode
     if not logistic_mode then return end
 
-    -- 1) Find all surrounding inserters
+    -- Step 1: Find all surrounding inserters
     local maximal_range = settings.global["automatic-logistic-chests-maximal-inserter-range"].value
     local surrounding_inserters = chest.surface.find_entities_filtered {
         area = {
@@ -121,40 +145,18 @@ function logistics_handler.handle_container(chest)
         type = "inserter"
     }
 
-    -- If no inserters around, nothing else to do
+    -- Step 2: Exit early if no inserters are found
     if utils.table_length(surrounding_inserters) == 0 then return end
 
-    -- 2) Prepare educts/products tables.
-    local educts_amounts = {}
-    local products_amounts = {}
-    -- For "requester" mode, we gather educts_amounts from any relevant machines that the inserters are "picking up from the chest".
-    -- For "storage"/others, we gather product_amounts if the inserter are "dropping into the chest".
-    for _, inserter in pairs(surrounding_inserters) do
-        -- Check if chest is 'requester' or not
-        if logistic_mode == "requester" then
-            if inserter_handler.is_inserter_picking_from_chest(inserter, chest) then
-                local drop_target = inserter.drop_target
-                if drop_target and drop_target.valid then
-                    educts_amounts = recipe_handler.get_educts_amounts(drop_target)
-                end
-            end
-        else
-            if inserter_handler.is_inserter_dropping_into_chest(inserter, chest) then
-                local pickup_target = inserter.pickup_target
-                if pickup_target and pickup_target.valid then
-                    products_amounts = recipe_handler.get_products_amounts(pickup_target)
-                end
-            end
-        end
-    end
-
-    -- 3) Now handle the container logic based on logistic_mode
+    -- Step 3: Handle the container logic based on logistic_mode
     if logistic_mode == "requester" then
-        handle_requester(chest, educts_amounts)
+        handle_requester(chest, surrounding_inserters)
     elseif logistic_mode == "storage" then
-        handle_storage(chest, surrounding_inserters, products_amounts)
+        handle_storage(chest, surrounding_inserters)
+    elseif logistic_mode == "buffer" then
+        handle_buffer(chest, surrounding_inserters)
     else
-        handle_other(chest, surrounding_inserters, products_amounts)
+        handle_other(chest, surrounding_inserters)
     end
 end
 

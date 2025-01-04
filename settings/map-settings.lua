@@ -76,6 +76,15 @@ local disable_inserters = {
     order = "a[automatic-logistic-chests]-h[disable-inserters]"
 }
 
+--- @type data.ModBoolSettingPrototype
+local trash_not_requested = {
+    type = "bool-setting",
+    name = "automatic-logistic-chests-trash-not-requested",
+    setting_type = "runtime-global",
+    default_value = true,
+    order = "a[automatic-logistic-chests]-i[trash-not-requested]"
+}
+
 data:extend({
     enable_artillery_turret_integration,
     enable_rocket_silo_integration,
@@ -84,5 +93,6 @@ data:extend({
     need_admin_to_refresh_all,
     provide_stack_modifier,
     request_stack_modifier,
-    disable_inserters
+    disable_inserters,
+    trash_not_requested
 })

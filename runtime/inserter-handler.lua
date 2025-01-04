@@ -43,8 +43,9 @@ end
 --- @return boolean
 --------------------------------------------------------------------------------
 function inserter_handler.is_inserter_picking_from_chest(inserter, chest)
-    local pickup_target = inserter.pickup_target
-    return pickup_target ~= nil and pickup_target.valid and pickup_target == chest
+    local pickup_position = inserter.pickup_position
+    return inserter.surface_index == chest.surface_index and
+        utils.are_positions_within_same_tile(pickup_position, chest.position)
 end
 
 --------------------------------------------------------------------------------
@@ -55,8 +56,9 @@ end
 --- @return boolean
 --------------------------------------------------------------------------------
 function inserter_handler.is_inserter_dropping_into_chest(inserter, chest)
-    local drop_target = inserter.drop_target
-    return drop_target ~= nil and drop_target.valid and drop_target == chest
+    local drop_position = inserter.drop_position
+    return inserter.surface_index == chest.surface_index and
+        utils.are_positions_within_same_tile(drop_position, chest.position)
 end
 
 --------------------------------------------------------------------------------

@@ -1,15 +1,15 @@
 local utils = {}
 
 --------------------------------------------------------------------------------
---- Check if two positions are within 0.5 tile distance in both X and Y.
+--- Utility function to check if two positions are within the same tile.
 ---
 --- @param position1 MapPosition
 --- @param position2 MapPosition
 --- @return boolean
 --------------------------------------------------------------------------------
-function utils.compare_positions(position1, position2)
-    return (position1.x > position2.x - 0.5 and position1.x < position2.x + 0.5)
-        and (position1.y > position2.y - 0.5 and position1.y < position2.y + 0.5)
+function utils.are_positions_within_same_tile(position1, position2)
+    return position1.x > position2.x - 0.5 and position1.x < position2.x + 0.5 and
+        position1.y > position2.y - 0.5 and position1.y < position2.y + 0.5
 end
 
 --------------------------------------------------------------------------------

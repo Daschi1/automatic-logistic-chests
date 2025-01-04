@@ -7,5 +7,5 @@
   "dependencies": [
     "base >= 2.0.28"
   ],
-  "description": "Automatically Configures Provider, Storage, and Requester Chests."
+  "description": "Automatically configures item requests and inserter conditions. Supports all logistic chests: passive provider, active provider, storage, requester, and buffer."
 }

@@ -65,7 +65,7 @@ end
 --- @param products_amounts table<string, number>
 --------------------------------------------------------------------------------
 function inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts)
-    -- Check global setting
+    -- Retrieve map setting
     local disable_inserters_setting = settings.global["automatic-logistic-chests-disable-inserters"].value
 
     -- Retrieve the first product and amount

@@ -25,13 +25,9 @@ local function set_inserter_conditions(control_behavior, condition)
     if condition then
         control_behavior.connect_to_logistic_network = true
         control_behavior.logistic_condition = condition
-        control_behavior.circuit_enable_disable = true
-        control_behavior.circuit_condition = condition
     else
         control_behavior.connect_to_logistic_network = false
         control_behavior.logistic_condition = nil
-        control_behavior.circuit_enable_disable = false
-        control_behavior.circuit_condition = nil
     end
 end
 

@@ -21,7 +21,11 @@ local function handle_requester(chest, surrounding_inserters)
     local logistics_point = chest.get_requester_point()
     if not logistics_point then return end
 
-    -- Step 4: Retrieve and clear the logistics section
+    -- Step 4: Enable or disable the 'Trash unrequested' option based on the map setting
+    local trash_not_requested = settings.global["automatic-logistic-chests-trash-not-requested"].value == true
+    logistics_point.trash_not_requested = trash_not_requested
+
+    -- Step 5: Retrieve and clear the logistics section
     local logistics_section = nil
     for _, section in pairs(logistics_point.sections) do
         if section and section.valid and section.group == "" then
@@ -32,10 +36,10 @@ local function handle_requester(chest, surrounding_inserters)
         end
     end
 
-    -- Step 5: Exit early if logistics section is invalid
+    -- Step 6: Exit early if logistics section is invalid
     if not logistics_section or not logistics_section.valid then return end
 
-    -- Step 6: Fill request slots with educt requests
+    -- Step 7: Fill request slots with educt requests
     local request_slot = 1
     for item_name, target_amount in pairs(educts_amounts) do
         local chest_slots = chest.prototype.get_inventory_size(defines.inventory.chest) or 1

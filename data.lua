@@ -1,2 +1,2 @@
--- keybinds
-require("keybinds.automatic-logistic-chests-keybinds")
+-- controls
+require("controls.automatic-logistic-chests-controls")

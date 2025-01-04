@@ -106,6 +106,20 @@ local function handle_other(chest, surrounding_inserters)
 end
 
 --------------------------------------------------------------------------------
+--- For a Buffer chest, set up logistic requests and configure inserters.
+---
+--- @param chest              LuaEntity
+--- @param surrounding_inserters LuaEntity[]
+--------------------------------------------------------------------------------
+local function handle_buffer(chest, surrounding_inserters)
+    -- Step 1: Handle logistic requests
+    handle_requester(chest, surrounding_inserters)
+
+    -- Step 2: Configure inserters
+    handle_other(chest, surrounding_inserters)
+end
+
+--------------------------------------------------------------------------------
 --- Main entry point logistic container placed/refresh event.
 --- Handles the logic depending on logistic_mode (requester, storage, etc.).
 ---
@@ -135,6 +149,8 @@ function logistics_handler.handle_container(chest)
         handle_requester(chest, surrounding_inserters)
     elseif logistic_mode == "storage" then
         handle_storage(chest, surrounding_inserters)
+    elseif logistic_mode == "buffer" then
+        handle_buffer(chest, surrounding_inserters)
     else
         handle_other(chest, surrounding_inserters)
     end

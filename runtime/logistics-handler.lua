@@ -19,7 +19,7 @@ local function handle_requester(chest, educts_amounts)
     -- Find or create "automatic-logistic-chests" section
     local logistics_section = nil
     for _, section in pairs(logistics_point.sections) do
-        if section and section.valid and section.group == "automatic-logistic-chests" then
+        if section and section.valid and section.group == "" then
             logistics_section = section
             -- Clear existing slots
             for slot_index = 1, section.filters_count do
@@ -27,9 +27,7 @@ local function handle_requester(chest, educts_amounts)
             end
         end
     end
-    if not logistics_section then
-        logistics_section = logistics_point.add_section("automatic-logistic-chests")
-    end
+
     -- If logistics_section is still not valid, exit early
     if not logistics_section or not logistics_section.valid then return end
 

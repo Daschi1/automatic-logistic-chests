@@ -3,6 +3,7 @@ local utils                             = require("runtime.utils")
 
 local recipe_handler                    = {}
 
+-- children of https://lua-api.factorio.com/latest/prototypes/CraftingMachinePrototype.html
 local recognized_standard_machine_types = {
     ["assembling-machine"] = true,
     ["furnace"]            = true,

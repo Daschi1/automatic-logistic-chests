@@ -20,15 +20,16 @@ Automatically configures item requests and inserter conditions. Supports all log
 
 #### Map Settings
 
+- **Send Message When All Refreshed**: Send a chat message when all logistic chests are refreshed (default: true).
+- **Only Admins Can Refresh All**: Require admin rights to refresh all logistic chests (default: true).
 - **Enable Artillery Turret Integration**: Enable requesting and providing artillery shells (default: true).
 - **Enable Rocket Silo Integration**: Enable requesting satellites and providing space science packs (default: true).
 - **Maximum Inserter Range**: Set the maximum range of modded inserters (default: 2, min: 1, max: 100).
-- **Send Message When All Refreshed**: Send a chat message when all logistic chests are refreshed (default: true).
-- **Only Admins Can Refresh All**: Require admin rights to refresh all logistic chests (default: true).
+- **Disable Inserters**: Disable inserters when the provide threshold is reached (default: true).
 - **Provide Stack Size Modifier**: Multiplier for the provided stack size (default: 1, min: 0.1, max: 100).
 - **Request Stack Size Modifier**: Multiplier for the requested stack size (default: 1, min: 0.1, max: 100).
-- **Disable Inserters**: Disable inserters when the provide threshold is reached (default: true).
 - **Trash Unrequested Items**: Enable the 'Trash unrequested' option when requesting items (default: true).
+- **Request From Buffer Chests**: Enable the 'Request from buffer chests' option for requester chests (default: false).
 
 #### Per-Player Settings
 

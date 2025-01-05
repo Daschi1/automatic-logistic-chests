@@ -85,6 +85,15 @@ local trash_not_requested = {
     order = "a[automatic-logistic-chests]-i[trash-not-requested]"
 }
 
+--- @type data.ModBoolSettingPrototype
+local request_from_buffer_chests = {
+    type = "bool-setting",
+    name = "automatic-logistic-chests-request-from-buffer-chests",
+    setting_type = "runtime-global",
+    default_value = false,
+    order = "a[automatic-logistic-chests]-j[request-from-buffer-chests]"
+}
+
 data:extend({
     enable_artillery_turret_integration,
     enable_rocket_silo_integration,
@@ -94,5 +103,6 @@ data:extend({
     provide_stack_modifier,
     request_stack_modifier,
     disable_inserters,
-    trash_not_requested
+    trash_not_requested,
+    request_from_buffer_chests
 })

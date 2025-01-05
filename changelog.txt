@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 2025-01-05
+  Features:
+    - Added option to enable or disable the 'Request from buffer chests' option for requester chests.
+  Info:
+    - Rearranged map settings to be more intuitive.
+---------------------------------------------------------------------------------------------------
 Version: 1.4.1
 Date: 2025-01-04
   Info:

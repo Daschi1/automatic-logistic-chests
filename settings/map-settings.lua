@@ -1,10 +1,28 @@
 --- @type data.ModBoolSettingPrototype
+local message_when_all_refreshed = {
+    type = "bool-setting",
+    name = "automatic-logistic-chests-message-when-all-refreshed",
+    setting_type = "runtime-global",
+    default_value = true,
+    order = "a[automatic-logistic-chests]-a[message-when-all-refreshed]"
+}
+
+--- @type data.ModBoolSettingPrototype
+local need_admin_to_refresh_all = {
+    type = "bool-setting",
+    name = "automatic-logistic-chests-need-admin-to-refresh-all",
+    setting_type = "runtime-global",
+    default_value = true,
+    order = "a[automatic-logistic-chests]-b[need-admin-to-refresh-all]"
+}
+
+--- @type data.ModBoolSettingPrototype
 local enable_artillery_turret_integration = {
     type = "bool-setting",
     name = "automatic-logistic-chests-enable-artillery-turret-integration",
     setting_type = "runtime-global",
     default_value = true,
-    order = "a[automatic-logistic-chests]-a[enable-artillery-turret-integration]"
+    order = "a[automatic-logistic-chests]-c[enable-artillery-turret-integration]"
 }
 
 --- @type data.ModBoolSettingPrototype
@@ -13,7 +31,7 @@ local enable_rocket_silo_integration = {
     name = "automatic-logistic-chests-enable-rocket-silo-integration",
     setting_type = "runtime-global",
     default_value = true,
-    order = "a[automatic-logistic-chests]-b[enable-rocket-silo-integration]"
+    order = "a[automatic-logistic-chests]-d[enable-rocket-silo-integration]"
 }
 
 --- @type data.ModIntSettingPrototype
@@ -24,25 +42,16 @@ local maximal_inserter_range = {
     default_value = 2,
     minimum_value = 1,
     maximum_value = 100,
-    order = "a[automatic-logistic-chests]-c[maximal-inserter-range]"
+    order = "a[automatic-logistic-chests]-e[maximal-inserter-range]"
 }
 
 --- @type data.ModBoolSettingPrototype
-local message_when_all_refreshed = {
+local disable_inserters = {
     type = "bool-setting",
-    name = "automatic-logistic-chests-message-when-all-refreshed",
+    name = "automatic-logistic-chests-disable-inserters",
     setting_type = "runtime-global",
     default_value = true,
-    order = "a[automatic-logistic-chests]-d[message-when-all-refreshed]"
-}
-
---- @type data.ModBoolSettingPrototype
-local need_admin_to_refresh_all = {
-    type = "bool-setting",
-    name = "automatic-logistic-chests-need-admin-to-refresh-all",
-    setting_type = "runtime-global",
-    default_value = true,
-    order = "a[automatic-logistic-chests]-e[need-admin-to-refresh-all]"
+    order = "a[automatic-logistic-chests]-f[disable-inserters]"
 }
 
 --- @type data.ModDoubleSettingPrototype
@@ -53,7 +62,7 @@ local provide_stack_modifier = {
     default_value = 1,
     minimum_value = 0.1,
     maximum_value = 100,
-    order = "a[automatic-logistic-chests]-f[provide-stack-modifier]"
+    order = "a[automatic-logistic-chests]-g[provide-stack-modifier]"
 }
 
 --- @type data.ModDoubleSettingPrototype
@@ -64,16 +73,7 @@ local request_stack_modifier = {
     default_value = 1,
     minimum_value = 0.1,
     maximum_value = 100,
-    order = "a[automatic-logistic-chests]-g[request-stack-modifier]"
-}
-
---- @type data.ModBoolSettingPrototype
-local disable_inserters = {
-    type = "bool-setting",
-    name = "automatic-logistic-chests-disable-inserters",
-    setting_type = "runtime-global",
-    default_value = true,
-    order = "a[automatic-logistic-chests]-h[disable-inserters]"
+    order = "a[automatic-logistic-chests]-h[request-stack-modifier]"
 }
 
 --- @type data.ModBoolSettingPrototype
@@ -85,14 +85,24 @@ local trash_not_requested = {
     order = "a[automatic-logistic-chests]-i[trash-not-requested]"
 }
 
+--- @type data.ModBoolSettingPrototype
+local request_from_buffer_chests = {
+    type = "bool-setting",
+    name = "automatic-logistic-chests-request-from-buffer-chests",
+    setting_type = "runtime-global",
+    default_value = false,
+    order = "a[automatic-logistic-chests]-j[request-from-buffer-chests]"
+}
+
 data:extend({
+    message_when_all_refreshed,
+    need_admin_to_refresh_all,
     enable_artillery_turret_integration,
     enable_rocket_silo_integration,
     maximal_inserter_range,
-    message_when_all_refreshed,
-    need_admin_to_refresh_all,
+    disable_inserters,
     provide_stack_modifier,
     request_stack_modifier,
-    disable_inserters,
-    trash_not_requested
+    trash_not_requested,
+    request_from_buffer_chests
 })

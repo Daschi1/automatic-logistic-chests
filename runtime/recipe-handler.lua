@@ -11,47 +11,57 @@ local recognized_standard_machine_types = {
 }
 
 --------------------------------------------------------------------------------
---- Gather educt amounts based on inserters interacting with the chest.
---- The function evaluates which inserters are picking items from the chest
---- and retrieves the educt amounts from their drop targets.
+--- Gather educt amounts and the quality of the first recipe based on inserters interacting with the chest.
+--- The function evaluates which inserters are picking items from the chest,
+--- retrieves the educt amounts from their drop targets, and identifies the
+--- quality of the first recipe encountered.
 ---
 --- @param chest LuaEntity # The chest entity being analyzed.
 --- @param surrounding_inserters LuaEntity[] # List of inserter entities surrounding the chest.
---- @return table<string, number> # A table mapping item names to their respective amounts.
+--- @return table<string, number>, string # A table mapping item names to their respective amounts, and the quality of the first recipe encountered.
 --------------------------------------------------------------------------------
-function recipe_handler.gather_educts(chest, surrounding_inserters)
+function recipe_handler.gather_educts_and_quality(chest, surrounding_inserters)
     local educts_amounts = {}
+    local first_quality = ""
     for _, inserter in pairs(surrounding_inserters) do
         if inserter_handler.is_inserter_picking_from_chest(inserter, chest) then
             local drop_target = inserter.drop_target
             if drop_target and drop_target.valid then
                 educts_amounts = recipe_handler.get_educts_amounts(drop_target)
+                if first_quality == "" then
+                    first_quality = recipe_handler.get_recipe_quality(drop_target)
+                end
             end
         end
     end
-    return educts_amounts
+    return educts_amounts, first_quality
 end
 
 --------------------------------------------------------------------------------
---- Gather product amounts based on inserters interacting with the chest.
---- The function evaluates which inserters are dropping items into the chest
---- and retrieves the product amounts from their pickup targets.
+--- Gather product amounts and the quality of the first recipe based on inserters interacting with the chest.
+--- The function evaluates which inserters are dropping items into the chest,
+--- retrieves the product amounts from their pickup targets, and identifies the
+--- quality of the first recipe encountered.
 ---
 --- @param chest LuaEntity # The chest entity being analyzed.
 --- @param surrounding_inserters LuaEntity[] # List of inserter entities surrounding the chest.
---- @return table<string, number> # A table mapping item names to their respective amounts.
+--- @return table<string, number>, string # A table mapping item names to their respective amounts, and the quality of the first recipe encountered.
 --------------------------------------------------------------------------------
-function recipe_handler.gather_products(chest, surrounding_inserters)
+function recipe_handler.gather_products_and_quality(chest, surrounding_inserters)
     local products_amounts = {}
+    local first_quality = ""
     for _, inserter in pairs(surrounding_inserters) do
         if inserter_handler.is_inserter_dropping_into_chest(inserter, chest) then
             local pickup_target = inserter.pickup_target
             if pickup_target and pickup_target.valid then
                 products_amounts = recipe_handler.get_products_amounts(pickup_target)
+                if first_quality == "" then
+                    first_quality = recipe_handler.get_recipe_quality(pickup_target)
+                end
             end
         end
     end
-    return products_amounts
+    return products_amounts, first_quality
 end
 
 --------------------------------------------------------------------------------
@@ -86,10 +96,11 @@ function recipe_handler.get_educts_amounts(entity)
 
     -- For recognized crafting machines, fetch the recipe
     local recipe = entity.get_recipe()
-    if not recipe then
+    if not recipe or not recipe.valid then
         return educts_amounts
     end
 
+    -- If recipe is valid, collect edcut amounts
     for _, ingredient in pairs(recipe.ingredients) do
         if ingredient.type == "item" and ingredient.amount then
             local stack_size = utils.get_stack_size(ingredient.name)
@@ -130,10 +141,11 @@ function recipe_handler.get_products_amounts(entity)
 
     -- For recognized crafting machines, fetch the recipe
     local recipe = entity.get_recipe()
-    if not recipe then
+    if not recipe or not recipe.valid then
         return products_amounts
     end
 
+    -- If recipe is valid, collect product amounts
     for _, product in pairs(recipe.products) do
         if product.type == "item" and product.amount then
             local product_name = product.name
@@ -153,6 +165,30 @@ function recipe_handler.get_products_amounts(entity)
     end
 
     return products_amounts
+end
+
+--------------------------------------------------------------------------------
+--- Gathers recipe quality for a crafting machine.
+--- Returns a table of item->produced_amount. If nothing found or not applicable,
+--- returns an empty table.
+---
+--- @param entity LuaEntity
+--- @return string
+--------------------------------------------------------------------------------
+function recipe_handler.get_recipe_quality(entity)
+    -- Check if entity is a recognized crafting machine
+    local entity_type = entity.type
+    if not recognized_standard_machine_types[entity_type] then
+        return ""
+    end
+
+    -- For recognized crafting machines, fetch the quality
+    local _, quality = entity.get_recipe()
+    if not quality or not quality.valid then
+        return ""
+    end
+
+    return quality.name
 end
 
 return recipe_handler

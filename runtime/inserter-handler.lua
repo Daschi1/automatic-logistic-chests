@@ -63,8 +63,9 @@ end
 --- @param surrounding_inserters LuaEntity[]
 --- @param chest LuaEntity
 --- @param products_amounts table<string, number>
+--- @param quality string
 --------------------------------------------------------------------------------
-function inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts)
+function inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts, quality)
     -- Retrieve map setting
     local disable_inserters_setting = settings.global["automatic-logistic-chests-disable-inserters"].value
 
@@ -84,7 +85,7 @@ function inserter_handler.configure_inserter_filter_condition(surrounding_insert
                     --- @type CircuitCondition
                     local condition = {
                         comparator = "<",
-                        first_signal = { type = "item", name = first_product_name },
+                        first_signal = { type = "item", name = first_product_name, quality = quality },
                         constant = first_product_amount,
                     }
                     -- api type definitions are not yet properly updated to use flattened CircuitCondition instead of CircuitConditionDefinition (https://lua-api.factorio.com/latest/concepts/CircuitConditionDefinition.html)

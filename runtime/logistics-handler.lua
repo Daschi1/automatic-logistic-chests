@@ -12,7 +12,7 @@ local logistics_handler = {}
 --------------------------------------------------------------------------------
 local function handle_requester(chest, surrounding_inserters)
     -- Step 1: Gather educts amounts
-    local educts_amounts = recipe_handler.gather_educts(chest, surrounding_inserters)
+    local educts_amounts, quality = recipe_handler.gather_educts_and_quality(chest, surrounding_inserters)
 
     -- Step 2: Exit early if no educts are found
     if utils.table_length(educts_amounts) == 0 then return end
@@ -58,7 +58,7 @@ local function handle_requester(chest, surrounding_inserters)
         local final_amount = math.min(target_amount, max_allowed)
 
         logistics_section.set_slot(request_slot, {
-            value = item_name,
+            value = { name = item_name, quality = quality },
             min   = final_amount
         })
         request_slot = request_slot + 1
@@ -72,11 +72,11 @@ end
 --- @param surrounding_inserters LuaEntity[]
 --------------------------------------------------------------------------------
 local function handle_storage(chest, surrounding_inserters)
-    -- Step 1: Gather products amounts
-    local products_amounts = recipe_handler.gather_products(chest, surrounding_inserters)
+    -- Step 1: Gather products amounts and quality
+    local products_amounts, quality = recipe_handler.gather_products_and_quality(chest, surrounding_inserters)
 
     -- Step 2: Configure the inserters around the chest to handle specific products
-    inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts)
+    inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts, quality)
 
     -- Step 3: Determine the appropriate storage filter
     local old_storage_filter = chest.storage_filter
@@ -110,10 +110,10 @@ end
 --------------------------------------------------------------------------------
 local function handle_other(chest, surrounding_inserters)
     -- Step 1: Gather products amounts
-    local products_amounts = recipe_handler.gather_products(chest, surrounding_inserters)
+    local products_amounts, quality = recipe_handler.gather_products_and_quality(chest, surrounding_inserters)
 
     -- Step 2: Configure inserter filter condition
-    inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts)
+    inserter_handler.configure_inserter_filter_condition(surrounding_inserters, chest, products_amounts, quality)
 end
 
 --------------------------------------------------------------------------------

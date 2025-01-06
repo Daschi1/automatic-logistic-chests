@@ -86,10 +86,11 @@ function recipe_handler.get_educts_amounts(entity)
 
     -- For recognized crafting machines, fetch the recipe
     local recipe = entity.get_recipe()
-    if not recipe then
+    if not recipe or not recipe.valid then
         return educts_amounts
     end
 
+    -- If recipe is valid, collect edcut amounts
     for _, ingredient in pairs(recipe.ingredients) do
         if ingredient.type == "item" and ingredient.amount then
             local stack_size = utils.get_stack_size(ingredient.name)
@@ -130,10 +131,11 @@ function recipe_handler.get_products_amounts(entity)
 
     -- For recognized crafting machines, fetch the recipe
     local recipe = entity.get_recipe()
-    if not recipe then
+    if not recipe or not recipe.valid then
         return products_amounts
     end
 
+    -- If recipe is valid, collect product amounts
     for _, product in pairs(recipe.products) do
         if product.type == "item" and product.amount then
             local product_name = product.name

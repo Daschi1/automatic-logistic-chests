@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 2025-01-11
+  Changes:
+    - Requester and buffer chest requests will now be cleared on placement or refresh if no recipe is found.
+---------------------------------------------------------------------------------------------------
 Version: 1.5.2
 Date: 2025-01-11
   Bugfixes:

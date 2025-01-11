@@ -14,25 +14,22 @@ local function handle_requester(chest, surrounding_inserters)
     -- Step 1: Gather educts amounts
     local educts_amounts, quality = recipe_handler.gather_educts_and_quality(chest, surrounding_inserters)
 
-    -- Step 2: Exit early if no educts are found
-    if utils.table_length(educts_amounts) == 0 then return end
-
-    -- Step 3: Retrieve the logistics point
+    -- Step 2: Retrieve the logistics point
     local logistics_point = chest.get_requester_point()
     if not logistics_point then return end
 
-    -- Step 4: Enable or disable the 'Trash unrequested' option based on the map setting
+    -- Step 3: Enable or disable the 'Trash unrequested' option based on the map setting
     local trash_not_requested = settings.global["automatic-logistic-chests-trash-not-requested"].value == true
     logistics_point.trash_not_requested = trash_not_requested
 
-    -- Step 5: If chest is a requester, enable or disable the 'Request from buffer chests' option based on the map setting
+    -- Step 4: If chest is a requester, enable or disable the 'Request from buffer chests' option based on the map setting
     if chest.prototype.logistic_mode == "requester" then
         local request_from_buffer_chests =
             settings.global["automatic-logistic-chests-request-from-buffer-chests"].value == true
         chest.request_from_buffers = request_from_buffer_chests
     end
 
-    -- Step 6: Retrieve and clear the logistics section
+    -- Step 5: Retrieve and clear the logistics section
     local logistics_section = nil
     for _, section in pairs(logistics_point.sections) do
         if section and section.valid and section.group == "" then
@@ -43,10 +40,11 @@ local function handle_requester(chest, surrounding_inserters)
         end
     end
 
-    -- Step 7: Exit early if logistics section is invalid
+    -- Step 6: Exit early if logistics section is invalid or if no educts are found
     if not logistics_section or not logistics_section.valid then return end
+    if utils.table_length(educts_amounts) == 0 then return end
 
-    -- Step 8: Fill request slots with educt requests
+    -- Step 7: Fill request slots with educt requests
     local request_slot = 1
     for item_name, target_amount in pairs(educts_amounts) do
         local chest_slots = chest.prototype.get_inventory_size(defines.inventory.chest) or 1

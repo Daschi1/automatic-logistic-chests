@@ -179,13 +179,13 @@ function recipe_handler.get_recipe_quality(entity)
     -- Check if entity is a recognized crafting machine
     local entity_type = entity.type
     if not recognized_standard_machine_types[entity_type] then
-        return ""
+        return "normal"
     end
 
     -- For recognized crafting machines, fetch the quality
     local _, quality = entity.get_recipe()
     if not quality or not quality.valid then
-        return ""
+        return "normal"
     end
 
     return quality.name

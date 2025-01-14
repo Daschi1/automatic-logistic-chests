@@ -42,17 +42,29 @@ Automatically configures item requests and inserter conditions for logistic ches
 
 ## FAQ
 
-### Why doesn’t the mod automatically update requests when recipes are removed or changed?
+### Why don’t requests update automatically when recipes change or are removed?
 
-The mod is designed to minimize complexity and resource usage. It does not actively monitor dynamic changes such as recipe updates. For such cases, use the provided manual refresh controls.
+The mod prioritizes simplicity and performance. It does not continuously monitor recipe changes or dynamically update chest requests to avoid unnecessary complexity. This design keeps the mod efficient and lightweight.
 
-### How do I clear requests when removing a recipe?
+To clear or refresh requests, use the **Refresh Selected Logistic Chest** or **Refresh All Logistic Chests** shortcuts.
 
-Use the **Refresh Selected Logistic Chest** shortcut to manually clear outdated requests and reset the chest configuration. Alternatively, use the **Refresh All Logistic Chests** shortcut to update all chests.
+### How do I update or clear requests when recipes change or are removed?
+
+When you change or remove a recipe from a crafting machine, existing requests for its components will remain until manually refreshed. To update or clear these requests:
+
+- Use **Refresh Selected Logistic Chest** to update a specific chest.
+- Use **Refresh All Logistic Chests** to refresh your entire setup.
 
 ### Can this mod handle dynamic setups?
 
-This mod is best suited for static setups like malls or predefined blueprints. While it can handle dynamic environments with manual refreshes, automated functionality for such cases is not within its intended scope.
+This mod works best for static setups like malls or predefined blueprints. It is designed to provide initial configuration and manual adjustments rather than continuously adapting to changes in dynamic environments.
+
+If you use the mod in dynamic setups, you will need to manually refresh chests when changes occur. Full automation for such setups is outside the mod's scope, as it focuses on maintaining simplicity and performance.
+
+### What’s the difference between static and dynamic setups?
+
+- **Static Setups**: These are stable configurations, such as preplanned blueprints or mall designs, where recipes and layouts don’t frequently change. The mod is optimized for these cases, requiring minimal interaction after the initial setup.
+- **Dynamic Setups**: These are setups where machines, recipes, or logistics are frequently altered. While the mod can be used in such scenarios, manual refreshes are required for updates.
 
 ## Inspiration
 

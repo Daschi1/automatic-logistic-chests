@@ -16,24 +16,6 @@ local need_admin_to_refresh_all = {
     order = "a[automatic-logistic-chests]-b[need-admin-to-refresh-all]"
 }
 
---- @type data.ModBoolSettingPrototype
-local enable_artillery_turret_integration = {
-    type = "bool-setting",
-    name = "automatic-logistic-chests-enable-artillery-turret-integration",
-    setting_type = "runtime-global",
-    default_value = true,
-    order = "a[automatic-logistic-chests]-c[enable-artillery-turret-integration]"
-}
-
---- @type data.ModBoolSettingPrototype
-local enable_rocket_silo_integration = {
-    type = "bool-setting",
-    name = "automatic-logistic-chests-enable-rocket-silo-integration",
-    setting_type = "runtime-global",
-    default_value = true,
-    order = "a[automatic-logistic-chests]-d[enable-rocket-silo-integration]"
-}
-
 --- @type data.ModIntSettingPrototype
 local maximal_inserter_range = {
     type = "int-setting",
@@ -42,7 +24,7 @@ local maximal_inserter_range = {
     default_value = 2,
     minimum_value = 1,
     maximum_value = 100,
-    order = "a[automatic-logistic-chests]-e[maximal-inserter-range]"
+    order = "a[automatic-logistic-chests]-c[maximal-inserter-range]"
 }
 
 --- @type data.ModBoolSettingPrototype
@@ -51,7 +33,7 @@ local disable_inserters = {
     name = "automatic-logistic-chests-disable-inserters",
     setting_type = "runtime-global",
     default_value = true,
-    order = "a[automatic-logistic-chests]-f[disable-inserters]"
+    order = "a[automatic-logistic-chests]-d[disable-inserters]"
 }
 
 --- @type data.ModDoubleSettingPrototype
@@ -62,7 +44,7 @@ local provide_stack_modifier = {
     default_value = 1,
     minimum_value = 0.1,
     maximum_value = 100,
-    order = "a[automatic-logistic-chests]-g[provide-stack-modifier]"
+    order = "a[automatic-logistic-chests]-e[provide-stack-modifier]"
 }
 
 --- @type data.ModDoubleSettingPrototype
@@ -73,7 +55,7 @@ local request_stack_modifier = {
     default_value = 1,
     minimum_value = 0.1,
     maximum_value = 100,
-    order = "a[automatic-logistic-chests]-h[request-stack-modifier]"
+    order = "a[automatic-logistic-chests]-f[request-stack-modifier]"
 }
 
 --- @type data.ModBoolSettingPrototype
@@ -82,7 +64,7 @@ local trash_not_requested = {
     name = "automatic-logistic-chests-trash-not-requested",
     setting_type = "runtime-global",
     default_value = true,
-    order = "a[automatic-logistic-chests]-i[trash-not-requested]"
+    order = "a[automatic-logistic-chests]-g[trash-not-requested]"
 }
 
 --- @type data.ModBoolSettingPrototype
@@ -91,18 +73,38 @@ local request_from_buffer_chests = {
     name = "automatic-logistic-chests-request-from-buffer-chests",
     setting_type = "runtime-global",
     default_value = false,
-    order = "a[automatic-logistic-chests]-j[request-from-buffer-chests]"
+    order = "a[automatic-logistic-chests]-h[request-from-buffer-chests]"
+}
+
+--- @type data.ModStringSettingPrototype
+local educt_integrations = {
+    type = "string-setting",
+    name = "automatic-logistic-chests-educt-integrations",
+    setting_type = "runtime-global",
+    default_value = "artillery-turret=artillery-shell;rocket-silo=satellite",
+    allow_blank = true,
+    order = "a[automatic-logistic-chests]-i[educt-integrations]"
+}
+
+--- @type data.ModStringSettingPrototype
+local product_integrations = {
+    type = "string-setting",
+    name = "automatic-logistic-chests-product-integrations",
+    setting_type = "runtime-global",
+    default_value = "rocket-silo=space-science-pack",
+    allow_blank = true,
+    order = "a[automatic-logistic-chests]-j[product-integrations]"
 }
 
 data:extend({
     message_when_all_refreshed,
     need_admin_to_refresh_all,
-    enable_artillery_turret_integration,
-    enable_rocket_silo_integration,
     maximal_inserter_range,
     disable_inserters,
     provide_stack_modifier,
     request_stack_modifier,
     trash_not_requested,
-    request_from_buffer_chests
+    request_from_buffer_chests,
+    educt_integrations,
+    product_integrations
 })

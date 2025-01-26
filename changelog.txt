@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025-01-26
+  Major Features:
+    - Replaced the old boolean integration settings (artillery turret, rocket silo) with new "Ingredient Integrations" and "Product Integrations" settings.
+      Refer to the mod description for detailed format information. If you had previously disabled integration settings, you will need to remove the corresponding entries from the new settings.
+---------------------------------------------------------------------------------------------------
 Version: 1.5.4
 Date: 2025-01-26
   Changes:

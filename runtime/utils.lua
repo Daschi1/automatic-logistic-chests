@@ -27,6 +27,23 @@ function utils.increment_value_in_table(table, key, value)
 end
 
 --------------------------------------------------------------------------------
+--- Safely increments all items from `source_table` into `target_table`.
+--- For each key in `source_table`, adds its value to the corresponding
+--- key in `target_table`. Creates the key in `target_table` if it doesn't exist.
+---
+--- @param target_table table<string, number> The table to be modified.
+--- @param source_table table<string, number> The table to read from.
+--------------------------------------------------------------------------------
+function utils.increment_values_from_table(target_table, source_table)
+    for key, amount in pairs(source_table) do
+        if not target_table[key] then
+            target_table[key] = 0
+        end
+        target_table[key] = target_table[key] + amount
+    end
+end
+
+--------------------------------------------------------------------------------
 --- Counts the number of entries in a table, including both array-like and
 --- non-array-like tables.
 ---

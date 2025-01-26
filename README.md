@@ -29,7 +29,7 @@ Automatically configures item requests and inserter conditions for logistic ches
 - **Trash Unrequested Items**: Enable the 'Trash unrequested' option when requesting items (default: true).
 - **Request From Buffer Chests**: Enable the 'Request from buffer chests' option for requester chests (default: false).
 - **Ingredient Integrations**: Configure custom ingredient integrations for specific entity types. Refer to the mod description for details on the exact format (default: artillery-turret=artillery-shell;rocket-silo=satellite).
-- **Product Integrations**: Configure custom product integrations for specific entity types. Refer to the Integration Format section below for details (default: `rocket-silo=space-science-pack`).
+- **Product Integrations**: Configure custom product integrations for specific entity types. Refer to the Integration Format section below for details (default: rocket-silo=space-science-pack).
 
 ### Per-Player Settings
 
@@ -104,13 +104,16 @@ For a comprehensive setup where:
 - Rocket silos provide **space-science-pack:legendary**,
 
 You can configure:
-```
-**Ingredient Integrations:**
-furnace=coal;assembling-machine=iron-plate:epic,copper-plate:rare
 
-**Product Integrations:**
-rocket-silo=space-science-pack:legendary
-```
+- **Ingredient Integrations:**
+  ```
+  furnace=coal;assembling-machine=iron-plate:epic,copper-plate:rare
+  ```
+
+- **Product Integrations:**
+  ```
+  rocket-silo=space-science-pack:legendary
+  ```
 
 ## FAQ
 
@@ -134,7 +137,7 @@ If your Ingredient or Product Integrations don’t behave as expected, ensure th
 1. You’ve used the correct format described in the **Integration Format** section of the mod description.  
    - Remember to separate entities with semicolons (`;`) and items with commas (`,`), and use the optional `:quality` specifier if needed.
 2. The entity names and item names match the in-game definitions exactly, including case sensitivity.
-3. If specifying quality, you’ve used a valid quality level (e.g., `epic`, `legendary`) or verified that it defaults to `normal` if omitted.
+3. If specifying quality, you’ve used a valid quality level (e.g., `epic`, `legendary`, ...) or verified that it defaults to `normal` if omitted.
 
 Refer to the **Integration Format** section in the mod description for full details and examples.
 

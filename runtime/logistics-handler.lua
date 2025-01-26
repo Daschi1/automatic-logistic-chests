@@ -84,8 +84,11 @@ local function handle_storage(chest, surrounding_inserters)
         break
     end
 
-    -- Step 4: Exit early if no valid products is found
-    if not first_product_name then return end
+    -- Step 4: Clear the filter and exit early if no valid product is found
+    if not first_product_name then
+        chest.storage_filter = nil
+        return
+    end
 
     -- Step 5: Update the storage filter
     if not old_storage_filter or utils.table_length(products_amounts) == 1 then

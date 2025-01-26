@@ -54,11 +54,7 @@ If an entity is **not** specified in the custom integrations, the mod defaults t
 
 **Note**: Some of the examples below do not make sense gameplay-wise but are included to demonstrate the format.
 
-### Ingredient Integrations
-
-This setting determines which items requester chests will request for specific entities.
-
-**Examples:**
+### Ingredient Integrations Examples
 
 - **Single Ingredient:**
   To have requester chests supply **coal** to furnaces:
@@ -78,11 +74,7 @@ This setting determines which items requester chests will request for specific e
   assembling-machine=iron-plate:epic,copper-plate:rare
   ```
 
-### Product Integrations
-
-This setting determines which items provider chests will offer from specific entities.
-
-**Examples:**
+### Product Integrations Examples
 
 - **Single Product:**
   To have provider chests offer **space-science-pack** from rocket silos:
@@ -96,7 +88,7 @@ This setting determines which items provider chests will offer from specific ent
   rocket-silo=space-science-pack:legendary
   ```
 
-### Combined Example
+### Combined Ingredient And Product Integrations Example
 
 For a comprehensive setup where:
 - Furnaces request **coal**,

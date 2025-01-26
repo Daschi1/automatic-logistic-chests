@@ -104,13 +104,16 @@ For a comprehensive setup where:
 - Rocket silos provide **space-science-pack:legendary**,
 
 You can configure:
-```
-**Ingredient Integrations:**
-furnace=coal;assembling-machine=iron-plate:epic,copper-plate:rare
 
-**Product Integrations:**
-rocket-silo=space-science-pack:legendary
-```
+- **Ingredient Integrations:**
+  ```
+  furnace=coal;assembling-machine=iron-plate:epic,copper-plate:rare
+  ```
+
+- **Product Integrations:**
+  ```
+  rocket-silo=space-science-pack:legendary
+  ```
 
 ## FAQ
 

@@ -42,20 +42,75 @@ Automatically configures item requests and inserter conditions for logistic ches
 
 ## Integration Format
 
-To handle special cases (e.g., rocket silos producing **rocket-part** with their internal recipe, but you want them to provide **space-science-pack** instead), you can override recipe ingredients and products using **Ingredient Integrations** and **Product Integrations**:
+The mod allows you to customize the automatic configuration of logistic chests by specifying **Ingredient Integrations** and **Product Integrations**.
+If an entity is **not** specified in the custom integrations, the mod defaults to the standard recipe-based configuration.
 
 - **Format**: `entity-type=item[:quality],another-item[:quality];other-entity=item2`.
   - Use **semicolons** (`;`) to separate multiple entity definitions.  
     Example: `entity1=item1;entity2=item2`.
   - Use **commas** (`,`) to list multiple items for the same entity.  
     Example: `entity=item1,item2`.
-  - The optional `:quality` part specifies item quality (e.g., `uncommon`, `epic`, ...) and defaults to `normal` if omitted.
+  - The optional `:quality` part specifies item quality (e.g., `uncommon`, `rare`, `epic`, `legendary`, ...) and defaults to `normal` if omitted.
 
-For example, to make a rocket silo produce **space-science-pack** instead of **rocket-part**, set the product integration to:
+**Note**: Some of the examples below do not make sense gameplay-wise but are included to demonstrate the format.
+
+### Ingredient Integrations
+
+This setting determines which items requester chests will request for specific entities.
+
+**Examples:**
+
+- **Single Ingredient:**
+  To have requester chests supply **coal** to furnaces:
+  ```
+  furnace=coal
+  ```
+
+- **Multiple Ingredients:**
+  If you want requester chests to supply **iron-plate** and **copper-plate** to assembling machines:
+  ```
+  assembling-machine=iron-plate,copper-plate
+  ```
+
+- **With Quality Specification:**
+  To request **iron-plate** of `epic` quality and **copper-plate** of `rare` quality for assembling machines:
+  ```
+  assembling-machine=iron-plate:epic,copper-plate:rare
+  ```
+
+### Product Integrations
+
+This setting determines which items provider chests will offer from specific entities.
+
+**Examples:**
+
+- **Single Product:**
+  To have provider chests offer **space-science-pack** from rocket silos:
+  ```
+  rocket-silo=space-science-pack
+  ```
+
+- **With Quality Specification:**
+  To provide **space-science-pack** of `legendary` quality from rocket silos:
+  ```
+  rocket-silo=space-science-pack:legendary
+  ```
+
+### Combined Example
+
+For a comprehensive setup where:
+- Furnaces request **coal**,
+- Assembling machines request **iron-plate:epic** and **copper-plate:rare**,
+- Rocket silos provide **space-science-pack:legendary**,
+
+You can configure:
 ```
-rocket-silo=space-science-pack
+**Ingredient Integrations:**
+furnace=coal;assembling-machine=iron-plate:epic,copper-plate:rare
+
+**Product Integrations:**
+rocket-silo=space-science-pack:legendary
 ```
-Any entity listed in these settings will use the custom items instead of the standard recipe ones. If an entity is **not** in your custom integrations, the mod falls back to the normal recipe approach.
 
 ## FAQ
 
@@ -75,9 +130,11 @@ When you change or remove a recipe from a crafting machine, existing requests fo
 ### Why do Ingredient or Product Integrations not work?
 
 If your Ingredient or Product Integrations don’t behave as expected, ensure that:
-1. You’ve used the correct format described in the **Integration Format** section of the mod description.
+
+1. You’ve used the correct format described in the **Integration Format** section of the mod description.  
+   - Remember to separate entities with semicolons (`;`) and items with commas (`,`), and use the optional `:quality` specifier if needed.
 2. The entity names and item names match the in-game definitions exactly, including case sensitivity.
-3. You’ve included any required `:quality` specifier, or verified that it defaults correctly to `normal`.
+3. If specifying quality, you’ve used a valid quality level (e.g., `epic`, `legendary`) or verified that it defaults to `normal` if omitted.
 
 Refer to the **Integration Format** section in the mod description for full details and examples.
 

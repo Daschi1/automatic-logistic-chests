@@ -137,7 +137,7 @@ If your Ingredient or Product Integrations don’t behave as expected, ensure th
 1. You’ve used the correct format described in the **Integration Format** section of the mod description.  
    - Remember to separate entities with semicolons (`;`) and items with commas (`,`), and use the optional `:quality` specifier if needed.
 2. The entity names and item names match the in-game definitions exactly, including case sensitivity.
-3. If specifying quality, you’ve used a valid quality level (e.g., `epic`, `legendary`) or verified that it defaults to `normal` if omitted.
+3. If specifying quality, you’ve used a valid quality level (e.g., `epic`, `legendary`, ...) or verified that it defaults to `normal` if omitted.
 
 Refer to the **Integration Format** section in the mod description for full details and examples.
 

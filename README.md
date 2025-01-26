@@ -22,14 +22,14 @@ Automatically configures item requests and inserter conditions for logistic ches
 
 - **Send Message When All Refreshed**: Display a chat message after refreshing all logistic chests (default: true).
 - **Only Admins Can Refresh All**: Limit the ability to refresh all logistic chests to admins (default: true).
-- **Enable Artillery Turret Integration**: Add support for requesting and providing artillery shells (default: true).
-- **Enable Rocket Silo Integration**: Add support for requesting satellites and providing space science packs (default: true).
 - **Maximum Inserter Range**: Set the maximum range of modded inserters (default: 2, min: 1, max: 100).
 - **Disable Inserters**: Disable inserters when the provide threshold is reached (default: true).
 - **Provide Stack Size Modifier**: Adjust the multiplier for the provided stack size (default: 1, min: 0.1, max: 100).
 - **Request Stack Size Modifier**: Adjust the multiplier for the requested stack size (default: 1, min: 0.1, max: 100).
 - **Trash Unrequested Items**: Enable the 'Trash unrequested' option when requesting items (default: true).
 - **Request From Buffer Chests**: Enable the 'Request from buffer chests' option for requester chests (default: false).
+- **Ingredient Integrations**: Configure custom ingredient integrations for specific entity types. Refer to the mod description for details on the exact format (default: artillery-turret=artillery-shell;rocket-silo=satellite).
+- **Product Integrations**: Configure custom product integrations for specific entity types. Refer to the Integration Format section below for details (default: `rocket-silo=space-science-pack`).
 
 ### Per-Player Settings
 
@@ -39,6 +39,23 @@ Automatically configures item requests and inserter conditions for logistic ches
 
 - **Refresh Selected Logistic Chest**: Shortcut to refresh a single logistic chest and its inserters (default: SHIFT + R).
 - **Refresh All Logistic Chests**: Shortcut to refresh all logistic chests and their inserters (default: CONTROL + R).
+
+## Integration Format
+
+To handle special cases (e.g., rocket silos producing **rocket-part** with their internal recipe, but you want them to provide **space-science-pack** instead), you can override recipe ingredients and products using **Ingredient Integrations** and **Product Integrations**:
+
+- **Format**: `entity-type=item[:quality],another-item[:quality];other-entity=item2`.
+  - Use **semicolons** (`;`) to separate multiple entity definitions.  
+    Example: `entity1=item1;entity2=item2`.
+  - Use **commas** (`,`) to list multiple items for the same entity.  
+    Example: `entity=item1,item2`.
+  - The optional `:quality` part specifies item quality (e.g., `uncommon`, `epic`, ...) and defaults to `normal` if omitted.
+
+For example, to make a rocket silo produce **space-science-pack** instead of **rocket-part**, set the product integration to:
+```
+rocket-silo=space-science-pack
+```
+Any entity listed in these settings will use the custom items instead of the standard recipe ones. If an entity is **not** in your custom integrations, the mod falls back to the normal recipe approach.
 
 ## FAQ
 
@@ -54,6 +71,15 @@ When you change or remove a recipe from a crafting machine, existing requests fo
 
 - Use **Refresh Selected Logistic Chest** to update a specific chest.
 - Use **Refresh All Logistic Chests** to refresh your entire setup.
+
+### Why do Ingredient or Product Integrations not work?
+
+If your Ingredient or Product Integrations don’t behave as expected, ensure that:
+1. You’ve used the correct format described in the **Integration Format** section of the mod description.
+2. The entity names and item names match the in-game definitions exactly, including case sensitivity.
+3. You’ve included any required `:quality` specifier, or verified that it defaults correctly to `normal`.
+
+Refer to the **Integration Format** section in the mod description for full details and examples.
 
 ### Can this mod handle dynamic setups?
 

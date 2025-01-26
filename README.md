@@ -33,7 +33,7 @@ Automatically configures item requests and inserter conditions for logistic ches
 
 ### Per-Player Settings
 
-- **Receive Message When Selected Refreshed**: Show a chat message after refreshing a selected logistic chest (default: true).
+- **Receive a message when refreshing a logistic chest**: Receive a chat message when a selected logistic chest is refreshed (default: true).
 
 ## Controls
 

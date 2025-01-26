@@ -1,11 +1,11 @@
 {
   "name": "automatic-logistic-chests",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "title": "Automatic Logistic Chests",
   "author": "Daschi",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.28"
+    "base >= 2.0.32"
   ],
   "description": "Automatically configures item requests and inserter conditions. Supports all logistic chests: passive provider, active provider, storage, requester, and buffer."
 }

@@ -32,7 +32,7 @@ local function handle_requester(chest, surrounding_inserters)
     -- Step 5: Retrieve and clear the logistics section
     local logistics_section = nil
     for _, section in pairs(logistics_point.sections) do
-        if section and section.valid and section.group == "" then
+        if section and section.valid and section.is_manual and section.group == "" then
             logistics_section = section
             for slot_index = 1, section.filters_count do
                 section.clear_slot(slot_index)

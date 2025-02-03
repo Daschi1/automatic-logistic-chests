@@ -86,19 +86,19 @@ end
 --------------------------------------------------------------------------------
 --- Returns a table of item -> required_amount (educts) for a given entity.
 ---
---- If the entity type is in the custom integration (integration_parsing.get_parsed_educt_integrations()),
---- we return the user-defined items. Otherwise, if it is in recognized_standard_machine_types,
---- we parse the actual recipe. If neither applies, we return an empty table.
+--- If the entity name is in the custom integration (integration_parsing.get_parsed_educt_integrations()),
+--- we return the user-defined items. Otherwise, if entity type is in recognized_standard_machine_types,
+--- we parse the recipe. If neither applies, we return an empty table.
 ---
 --- @param entity LuaEntity
 --- @return table<string, number> educts_amounts
 --------------------------------------------------------------------------------
 function recipe_handler.get_educts_amounts(entity)
-    local entity_type = entity.type
     local educts_amounts = {}
 
     -- 1) Check user-defined custom integration
-    local custom_integration = integration_parsing.get_parsed_educt_integrations()[entity_type]
+    local entity_name = entity.name
+    local custom_integration = integration_parsing.get_parsed_educt_integrations()[entity_name]
     if custom_integration then
         for _, entry in pairs(custom_integration) do
             local item_name = entry.item
@@ -110,6 +110,7 @@ function recipe_handler.get_educts_amounts(entity)
     end
 
     -- 2) If not in custom map, check recognized standard machine
+    local entity_type = entity.type
     if recognized_standard_machine_types[entity_type] then
         local recipe = entity.get_recipe()
         if not recipe or not recipe.valid then
@@ -135,19 +136,19 @@ end
 --------------------------------------------------------------------------------
 --- Returns a table of item -> produced_amount (products) for a given entity.
 ---
---- If the entity type is in the custom integration (integration_parsing.get_parsed_product_integrations()),
---- we return the user-defined items. Otherwise, if it is recognized, we parse the recipe.
---- If neither applies, we return an empty table.
+--- If the entity name is in the custom integration (integration_parsing.get_parsed_product_integrations()),
+--- we return the user-defined items. Otherwise, if entity type is in recognized_standard_machine_types,
+--- we parse the recipe. If neither applies, we return an empty table.
 ---
 --- @param entity LuaEntity
 --- @return table<string, number> products_amounts
 --------------------------------------------------------------------------------
 function recipe_handler.get_products_amounts(entity)
-    local entity_type = entity.type
     local products_amounts = {}
 
     -- 1) Check user-defined custom integration
-    local custom_integration = integration_parsing.get_parsed_product_integrations()[entity_type]
+    local entity_name = entity.name
+    local custom_integration = integration_parsing.get_parsed_product_integrations()[entity_name]
     if custom_integration then
         for _, entry in pairs(custom_integration) do
             local item_name = entry.item
@@ -159,6 +160,7 @@ function recipe_handler.get_products_amounts(entity)
     end
 
     -- 2) If not in custom map, check recognized standard machine
+    local entity_type = entity.type
     if recognized_standard_machine_types[entity_type] then
         local recipe = entity.get_recipe()
         if not recipe or not recipe.valid then
@@ -183,9 +185,9 @@ end
 
 --------------------------------------------------------------------------------
 --- Gets the quality of the educt recipe for a given entity.
---- 1) If the entity type is in `integration_parsing.get_parsed_educt_integrations()`, returns the quality
+--- 1) If the entity name is in `integration_parsing.get_parsed_educt_integrations()`, returns the quality
 ---    of the first listed item (default "normal" if missing).
---- 2) Otherwise, if the entity is a recognized standard machine, we call
+--- 2) Otherwise, if the entity type is a recognized standard machine, we call
 ---    `entity.get_recipe()`, then read the second return value as `quality`.
 --- 3) Returns "normal" if neither applies or no valid quality is found.
 ---
@@ -193,16 +195,16 @@ end
 --- @return string # The quality name, e.g. "normal", "epic", etc.
 --------------------------------------------------------------------------------
 function recipe_handler.get_recipe_educt_quality(entity)
-    local entity_type = entity.type
-
     -- 1) Check user-defined custom integration first
-    local custom_integration = integration_parsing.get_parsed_educt_integrations()[entity_type]
+    local entity_name = entity.name
+    local custom_integration = integration_parsing.get_parsed_educt_integrations()[entity_name]
     if custom_integration and #custom_integration > 0 then
         -- Return the quality from the first entry (defaulting to "normal")
         return custom_integration[1].quality or "normal"
     end
 
     -- 2) If recognized standard machine, fetch the recipe's quality
+    local entity_type = entity.type
     if recognized_standard_machine_types[entity_type] then
         local _, quality = entity.get_recipe()
         if quality and quality.valid then
@@ -216,9 +218,9 @@ end
 
 --------------------------------------------------------------------------------
 --- Gets the quality of the product recipe for a given entity.
---- 1) If the entity type is in `integration_parsing.get_parsed_product_integrations()`, returns the quality
+--- 1) If the entity name is in `integration_parsing.get_parsed_product_integrations()`, returns the quality
 ---    of the first listed item (default "normal" if missing).
---- 2) Otherwise, if the entity is a recognized standard machine, we call
+--- 2) Otherwise, if the entity type is a recognized standard machine, we call
 ---    `entity.get_recipe()`, then read the second return value as `quality`.
 --- 3) Returns "normal" if neither applies or no valid quality is found.
 ---
@@ -226,16 +228,16 @@ end
 --- @return string # The quality name, e.g. "normal", "epic", etc.
 --------------------------------------------------------------------------------
 function recipe_handler.get_recipe_product_quality(entity)
-    local entity_type = entity.type
-
     -- 1) Check user-defined custom integration first
-    local custom_integration = integration_parsing.get_parsed_product_integrations()[entity_type]
+    local entity_name = entity.name
+    local custom_integration = integration_parsing.get_parsed_product_integrations()[entity_name]
     if custom_integration and #custom_integration > 0 then
         -- Return the quality from the first entry (defaulting to "normal")
         return custom_integration[1].quality or "normal"
     end
 
     -- 2) If recognized standard machine, fetch the recipe's quality
+    local entity_type = entity.type
     if recognized_standard_machine_types[entity_type] then
         local _, quality = entity.get_recipe()
         if quality and quality.valid then

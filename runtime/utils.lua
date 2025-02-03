@@ -66,7 +66,9 @@ end
 --- @return number
 --------------------------------------------------------------------------------
 function utils.get_stack_size(item_name)
-    return prototypes.item[item_name].stack_size
+    local item = prototypes.item[item_name]
+    assert(item, "No item prototype found for '" .. item_name .. "'.")
+    return item.stack_size
 end
 
 --------------------------------------------------------------------------------

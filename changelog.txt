@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2025-02-03
+  Features:
+    - Added warning messages when unknown entities or items are defined in an integration setting.
+    - Added safeguards to prevent crashes when defining non-existing items in integration settings.
+  Bugfixes:
+    - Fixed an issue where integration settings defined entities were checked against entity type instead of entity name.
+    - Fixed a crash that occurred when defining a non-existing item in an integration setting.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025-02-02
   Bugfixes:

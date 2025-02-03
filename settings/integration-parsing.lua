@@ -29,7 +29,7 @@ local function trim(s)
 end
 
 --------------------------------------------------------------------------------
---- Gathers valid quality names by iterating over data.raw["quality"].
+--- Gathers valid quality names by iterating over prototypes["quality"].
 --- Also ensures "normal" is always included.
 --- In a real mod, you would likely do this in data stage and store the result.
 ---
@@ -51,6 +51,24 @@ local function get_valid_quality_names()
 end
 
 --------------------------------------------------------------------------------
+--- Checks if a given entity_type exists in prototypes.entity.
+--- @param entity_type string The entity type.
+--- @return boolean True if the entity exists, false otherwise.
+--------------------------------------------------------------------------------
+local function is_valid_entity(entity_type)
+    return prototypes.entity and prototypes.entity[entity_type] ~= nil
+end
+
+--------------------------------------------------------------------------------
+--- Checks if a given item exists in prototypes.
+--- @param item_name string The name of the item.
+--- @return boolean True if the item exists, false otherwise.
+--------------------------------------------------------------------------------
+local function is_valid_item(item_name)
+    return prototypes.item and prototypes.item[item_name] ~= nil
+end
+
+--------------------------------------------------------------------------------
 --- Parses a single integration setting string (e.g., for educts or products).
 ---
 --- Expected format:
@@ -60,43 +78,42 @@ end
 ---  - Semicolons (`;`) separate multiple entity definitions.
 ---  - Commas (`,`) separate multiple items within the same entity definition.
 ---  - If `:quality` is omitted, defaults to `"normal"`.
----  - Valid quality names are taken from `data.raw["quality"]` plus `"normal"`.
+---  - Valid quality names are taken from `prototypes["quality"]` plus `"normal"`.
 ---  - If a non-"normal" quality is specified but `script.feature_flags.quality` is false/nil,
 ---    we force it to `"normal"` and warn the user.
+---  - If the parsed entity_type does not exist, warn the user.
+---  - If a parsed item_name does not exist, warn the user.
 ---
 --- Localized warnings:
----   * {"automatic-logistic-chests.invalid-integration-syntax", <line>}
----   * {"automatic-logistic-chests.empty-entity-or-item-list", <line>}
----   * {"automatic-logistic-chests.unknown-quality", <quality>}
+---   * {"automatic-logistic-chests.invalid-integration-syntax", <entity_def>}
+---   * {"automatic-logistic-chests.empty-entity-or-item-list", <entity_def>}
 ---   * {"automatic-logistic-chests.quality-disabled", <quality>}
+---   * {"automatic-logistic-chests.unknown-quality", <quality>}
+---   * {"automatic-logistic-chests.unknown-entity", <entity_type>}
+---   * {"automatic-logistic-chests.unknown-item", <item_name>}
 ---
 --- @param raw_string string The raw user input from the mod setting.
---- @usage parse_integration_setting("artillery-turret = artillery-shell:epic; rocket-silo = satellite")
---- @usage parse_integration_setting("machine = itemA, itemB:rare")
---- @usage parse_integration_setting("")
----
 --- @return table<string, table> # Map of entity-type -> list of { item:string, quality:string }
 --------------------------------------------------------------------------------
 local function parse_integration_setting(raw_string)
     local result = {}
 
-    -- Fetch the valid qualities
+    -- Fetch the valid qualities.
     local valid_qualities_from_data = get_valid_quality_names()
     local quality_feature_enabled = (script and script.feature_flags and script.feature_flags.quality)
 
-    -- Split on semicolons to separate entity definitions
+    -- Split on semicolons to separate entity definitions.
     for entity_def in string.gmatch(raw_string, "([^;]+)") do
         local trimmed_def = trim(entity_def)
         if trimmed_def ~= "" then
-            -- Example entity_def: "artillery-turret = artillery-shell, explosive-shell:epic"
-
             -- Split on '=' to separate "entity-type" from the item definitions
+            -- Example: "artillery-turret=artillery-shell,explosive-shell:epic"
             local parts = {}
             for piece in string.gmatch(trimmed_def, "([^=]+)") do
                 table.insert(parts, trim(piece))
             end
 
-            -- We expect exactly 2 parts (entity and items)
+            -- We expect exactly 2 parts: the entity and its items.
             if #parts ~= 2 then
                 if game and game.print then
                     game.print({ "automatic-logistic-chests.invalid-integration-syntax", trimmed_def })
@@ -114,26 +131,34 @@ local function parse_integration_setting(raw_string)
                 goto continue
             end
 
+            -- Check if the parsed entity_type exists.
+            if not is_valid_entity(entity_type) then
+                if game and game.print then
+                    game.print({ "automatic-logistic-chests.unknown-entity", entity_type })
+                end
+                goto continue
+            end
+
             local item_list = {}
-            -- Split items by comma
+            -- Split items by comma.
             for item_def in string.gmatch(items_string, "([^,]+)") do
                 local trimmed_item_def = trim(item_def)
                 if trimmed_item_def ~= "" then
-                    -- item[:quality]
+                    -- Expected format: item[:quality]
                     local subparts = {}
                     for piece in string.gmatch(trimmed_item_def, "([^:]+)") do
                         table.insert(subparts, trim(piece))
                     end
 
                     local item_name = subparts[1] or ""
-                    local quality_name = "normal" -- default
+                    local quality_name = "normal" -- default quality
 
                     if #subparts == 2 then
                         local q = subparts[2]
                         if q and q ~= "" then
                             local q_lower = q:lower()
 
-                            -- Check if it's recognized by data OR "normal"
+                            -- Check if it's recognized or "normal".
                             if valid_qualities_from_data[q_lower] then
                                 -- If non-normal, check feature flag
                                 if q_lower ~= "normal" then
@@ -161,10 +186,17 @@ local function parse_integration_setting(raw_string)
                     end
 
                     if item_name ~= "" then
-                        table.insert(item_list, {
-                            item    = item_name,
-                            quality = quality_name
-                        })
+                        -- Check if the parsed item exists.
+                        if not is_valid_item(item_name) then
+                            if game and game.print then
+                                game.print({ "automatic-logistic-chests.unknown-item", item_name })
+                            end
+                        else
+                            table.insert(item_list, {
+                                item    = item_name,
+                                quality = quality_name
+                            })
+                        end
                     end
                 end
             end

@@ -29,7 +29,7 @@ local function trim(s)
 end
 
 --------------------------------------------------------------------------------
---- Gathers valid quality names by iterating over data.raw["quality"].
+--- Gathers valid quality names by iterating over prototypes["quality"].
 --- Also ensures "normal" is always included.
 --- In a real mod, you would likely do this in data stage and store the result.
 ---

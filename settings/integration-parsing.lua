@@ -60,7 +60,7 @@ end
 ---  - Semicolons (`;`) separate multiple entity definitions.
 ---  - Commas (`,`) separate multiple items within the same entity definition.
 ---  - If `:quality` is omitted, defaults to `"normal"`.
----  - Valid quality names are taken from `data.raw["quality"]` plus `"normal"`.
+---  - Valid quality names are taken from `prototypes["quality"]` plus `"normal"`.
 ---  - If a non-"normal" quality is specified but `script.feature_flags.quality` is false/nil,
 ---    we force it to `"normal"` and warn the user.
 ---
